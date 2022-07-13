@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pokemonAPI.Data;
 
@@ -11,9 +12,10 @@ using pokemonAPI.Data;
 namespace pokemonAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220713145605_CreatePokemonsTable")]
+    partial class CreatePokemonsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,14 +77,9 @@ namespace pokemonAPI.Migrations
                     b.Property<Guid>("MoveTemplateId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PokemonId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MoveTemplateId");
-
-                    b.HasIndex("PokemonId");
 
                     b.ToTable("Moves");
                 });
@@ -142,6 +139,9 @@ namespace pokemonAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<Guid>("StatusId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -422,15 +422,7 @@ namespace pokemonAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("pokemonAPI.Models.Pokemon", "Pokemon")
-                        .WithMany("Moves")
-                        .HasForeignKey("PokemonId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("MoveTemplate");
-
-                    b.Navigation("Pokemon");
                 });
 
             modelBuilder.Entity("pokemonAPI.Models.MoveTemplate", b =>
@@ -500,11 +492,6 @@ namespace pokemonAPI.Migrations
                 });
 
             modelBuilder.Entity("pokemonAPI.Models.MoveTemplate", b =>
-                {
-                    b.Navigation("Moves");
-                });
-
-            modelBuilder.Entity("pokemonAPI.Models.Pokemon", b =>
                 {
                     b.Navigation("Moves");
                 });
